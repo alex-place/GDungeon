@@ -16,7 +16,7 @@ public class VersionManager {
 			file.writeString(String.valueOf(version), false);
 		} else {
 			version = Double.valueOf(file.readString());
-			version += 0.01;
+			version += 1;
 			file.writeString(df.format(version), false);
 		}
 	}

@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
 
 public class OptionsScreen implements Screen {
@@ -47,6 +49,14 @@ public class OptionsScreen implements Screen {
 	boolean vsync = false;
 	CheckBox fullscreenCheckBox;
 	boolean fullscreen = false;
+	private Table table;
+	private Label title;
+	private Label resolutionLbl;
+	private Label sfx;
+	private Label music;
+	private TextButton saveBtn;
+	private TextButton backBtn;
+	private Table window;
 
 	public OptionsScreen(Main main) {
 		this.main = main;
@@ -56,7 +66,7 @@ public class OptionsScreen implements Screen {
 	public void render(float delta) {
 		update();
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl20.glClearColor(0, 0, 0, 0);
+		Gdx.gl20.glClearColor(0.3f, 0.3f, 0.3f, 1);
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
@@ -93,38 +103,33 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(input);
+		batch = new SpriteBatch();
 
-		if (batch == null)
-			batch = new SpriteBatch();
-		if (skin == null)
-			skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+		skin = new Skin();
+		skin.add("default-font", Assets.instance.fonts.medium);
+		skin.addRegions(new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
+		skin.load(Gdx.files.internal("ui/uiskin.json"));
 
 		stage = new Stage();
-
 		input = new InputMultiplexer();
 		input.addProcessor(stage);
-
 		Gdx.input.setInputProcessor(input);
 
 		displays = Gdx.graphics.getDisplayModes();
 
 		loadOptions();
 
-		// Add widgets to table then add them to scroll pane then add them
-		// to
-		// window
-		Table table = new Table();
+		table = new Table();
 		// table.debug();
 		table.center();
 		table.defaults().expandX().space(5).align(Align.center);
 
-		Label title = new Label("Options", skin);
+		title = new Label("Options", skin);
 		title.setAlignment(Align.center);
 		table.add(title).colspan(3).expandY().align(Align.top).spaceTop(10)
 				.row();
 
-		Label resolutionLbl = new Label("Resolution", skin);
+		resolutionLbl = new Label("Resolution", skin);
 		table.add(resolutionLbl).align(Align.right);
 
 		displayModes = new SelectBox<DisplayMode>(skin);
@@ -133,8 +138,7 @@ public class OptionsScreen implements Screen {
 
 		table.add(displayModes).row();
 
-		// Create the sfx slider
-		Label sfx = new Label("Sound Effects", skin);
+		sfx = new Label("Sound Effects", skin);
 		table.add(sfx).align(Align.right).spaceRight(10);
 
 		sfxSlider = new Slider(0, 100, 1, false, skin);
@@ -144,8 +148,7 @@ public class OptionsScreen implements Screen {
 		sfxVolumeLbl = new Label(sfxVolume + "", skin);
 		table.add(sfxVolumeLbl).align(Align.center).spaceLeft(10).row();
 
-		// Create the music slider
-		Label music = new Label("Music", skin);
+		music = new Label("Music", skin);
 		table.add(music).align(Align.right).spaceRight(10);
 
 		musicSlider = new Slider(0, 100, 1, false, skin);
@@ -181,8 +184,7 @@ public class OptionsScreen implements Screen {
 
 		table.add(vsyncCheckBox).colspan(2).row();
 
-		// Create the Menu button
-		TextButton saveBtn = new TextButton("Save", skin);
+		saveBtn = new TextButton("Save", skin);
 		saveBtn.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
@@ -200,8 +202,7 @@ public class OptionsScreen implements Screen {
 		table.add(saveBtn).align(Align.center).colspan(3).spaceTop(20)
 				.fill(0.5f, 0f).row();
 
-		// Create the Menu button
-		TextButton backBtn = new TextButton("Back", skin);
+		backBtn = new TextButton("Back", skin);
 		backBtn.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
@@ -227,7 +228,7 @@ public class OptionsScreen implements Screen {
 		scrollPane.setSmoothScrolling(true);
 		scrollPane.setScrollingDisabled(true, false);
 
-		Table window = new Table(skin);
+		window = new Table(skin);
 		window.debug();
 		window.setFillParent(true);
 		window.row().fill().expandX();
@@ -238,7 +239,7 @@ public class OptionsScreen implements Screen {
 
 		stage.addActor(window);
 		stage.act();
-		
+
 	}
 
 	private void loadOptions() {
@@ -276,7 +277,6 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void hide() {
-
 	}
 
 	@Override

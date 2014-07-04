@@ -2,6 +2,7 @@ package com.undeadstudio.gdungeon;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.undeadstudio.gdungeon.screens.ScreenManager;
 
 public class Main extends Game {
@@ -14,6 +15,7 @@ public class Main extends Game {
 
 	@Override
 	public void create() {
+		Assets.instance.init(new AssetManager());
 		versionManager = new VersionManager();
 		preferencesManager = new PreferencesManager();
 		LOG = "GDungeon v" + versionManager.getVersion();
@@ -21,7 +23,7 @@ public class Main extends Game {
 		versionManager.buildProject();
 
 		Gdx.app.log(LOG, "Launched successfully");
-		setScreen(manager.getOptionsScreen());
+		setScreen(manager.getNewGameScreen());
 
 	}
 

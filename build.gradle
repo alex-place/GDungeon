@@ -4,8 +4,8 @@ buildscript {
         mavenLocal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10+'
-        classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.8'
+        classpath "com.android.tools.build:gradle:0.10+"
+        classpath "com.github.jtakakura:gradle-robovm-plugin:0.0.8"
     }
 }
 
@@ -13,11 +13,11 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
+    version = "1.0"
     ext {
-        appName = 'GDungeon'
-        gdxVersion = '1.2.0'
-        roboVMVersion = '0.0.12'
+        appName = "GDungeon"
+        gdxVersion = "1.2.1-SNAPSHOT"
+        roboVMVersion = "0.0.12"
     }
 
     repositories {
