@@ -1,3 +1,6 @@
+##ignores the save files
+saves/
+
 ## Java
 
 *.class
@@ -28,6 +31,8 @@ android/gen/
 *.iml
 out/
 com_crashlytics_export_strings.xml
+
+
 
 ## Eclipse
 .classpath

@@ -13,7 +13,7 @@ public class VersionManager {
 	public void buildProject() {
 		FileHandle file = Gdx.files.local("ver.txt");
 		if (!file.exists()) {
-			file.writeString(String.valueOf(version), false);
+			file.writeString(df.format(version), false);
 		} else {
 			version = Double.valueOf(file.readString());
 			version += 1;

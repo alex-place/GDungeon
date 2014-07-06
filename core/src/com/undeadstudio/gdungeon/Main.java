@@ -23,7 +23,7 @@ public class Main extends Game {
 		versionManager.buildProject();
 
 		Gdx.app.log(LOG, "Launched successfully");
-		setScreen(manager.getNewGameScreen());
+		setScreen(manager.getLoadGame());
 
 	}
 

@@ -19,8 +19,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
+import com.undeadstudio.gdungeon.Player;
 
 public class CharacterCreationScreen implements Screen {
 
@@ -40,12 +42,14 @@ public class CharacterCreationScreen implements Screen {
 	String rougeDescription = "For rogues, the only code is the contract, and their honor is purchased in gold. Free from the constraints of a conscience, these mercenaries rely on brutal and efficient tactics. Lethal assassins and masters of stealth, they will approach their marks from behind, piercing a vital organ and vanishing into the shadows before the victim hits the ground.";
 	private Table table;
 	private Label title;
+	private Label className;
 	private TextButton left;
 	private TextButton right;
 	private TextField name;
 	private Label classDescription;
 	private TextButton menu;
 	private Table window;
+	private TextButton finished;
 
 	public CharacterCreationScreen(Main main) {
 		this.main = main;
@@ -90,7 +94,7 @@ public class CharacterCreationScreen implements Screen {
 		title.setAlignment(Align.center);
 		table.add(title).colspan(columns).row();
 
-		Label className = new Label("Rouge", skin);
+		className = new Label("Rouge", skin);
 		className.setAlignment(Align.center);
 		table.add();
 		table.add(className).align(Align.center).row();
@@ -143,14 +147,20 @@ public class CharacterCreationScreen implements Screen {
 
 		table.add(menu).colspan(3);
 
-		TextButton finished = new TextButton("Finished", skin);
+		finished = new TextButton("Finished", skin);
 		finished.addListener(new InputListener() {
-			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("down");
+				return true;
+			}
+
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				// TODO Auto-generated method stub
-				super.touchUp(event, x, y, pointer, button);
+				System.out.println("up");
+				finishedWithCreation();
 			}
+
 		});
 
 		table.add(finished).colspan(3);
@@ -168,6 +178,33 @@ public class CharacterCreationScreen implements Screen {
 
 		stage.addActor(window);
 		stage.act();
+
+	}
+
+	public void finishedWithCreation() {
+		if (!name.getText().isEmpty()) {
+			createCharacter();
+			main.setScreen(main.manager.getGame());
+		}
+	}
+
+	public void createCharacter() {
+		Player player = new Player();
+		player.setStartingClass(className.getText().toString());
+		player.setX(-1);
+		player.setY(-1);
+		player.setName(name.getText());
+		player.setHealth(70);
+		player.setAp(3);
+		player.setSp(6);
+
+		Json json = new Json();
+		System.out.println(json.prettyPrint(player));
+
+		FileHandle playerFile = Gdx.files.local("saves/" + player.getName()
+				+ ".json");
+		playerFile.writeString(json.prettyPrint(player), false);
+
 	}
 
 	@Override

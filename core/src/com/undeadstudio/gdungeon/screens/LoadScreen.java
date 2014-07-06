@@ -16,11 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
+import com.undeadstudio.gdungeon.Player;
 
-public class MenuScreen implements Screen {
+public class LoadScreen implements Screen {
 
 	Main main;
 	Stage stage;
@@ -28,11 +30,12 @@ public class MenuScreen implements Screen {
 	Skin skin;
 	SpriteBatch batch;
 	ScrollPane scrollPane;
+	Table table;
 
 	InputMultiplexer input;
 	int animals = 8;
 
-	public MenuScreen(Main main) {
+	public LoadScreen(Main main) {
 		this.main = main;
 	}
 
@@ -68,14 +71,12 @@ public class MenuScreen implements Screen {
 
 		// Add widgets to table then add them to scroll pane then add them to
 		// window
-		Table table = new Table();
+		table = new Table();
 		// table.debug();
 		table.center();
-		table.defaults().minSize(Gdx.graphics.getHeight() / 8).pad(20)
-				.prefSize(Gdx.graphics.getHeight() - 100);
+		table.defaults().expandX().fill(0.5f, 1f).space(5);
 
-		Label title = new Label("GDungeon Build #"
-				+ main.versionManager.getVersion(), skin);
+		Label title = new Label("Load Game", skin);
 		title.setAlignment(Align.center);
 		table.add(title);
 		table.row();
@@ -98,45 +99,9 @@ public class MenuScreen implements Screen {
 		});
 
 		table.add(newGame).align(Align.center);
-		table.row();// Create the new game button
-		TextButton loadGame = new TextButton("Load Game", skin);
-		loadGame.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				System.out.println("down");
-				return true;
-			}
-
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-				System.out.println("up");
-				main.setScreen(main.manager.getLoadGame());
-
-			}
-		});
-
-		table.add(loadGame).align(Align.center);
 		table.row();
 
-		// Create the options button
-		TextButton options = new TextButton("Options", skin);
-		options.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				System.out.println("down");
-				return true;
-			}
-
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-				System.out.println("up");
-				main.setScreen(main.manager.getOptionsScreen());
-
-			}
-		});
-
-		table.add(options).align(Align.center);
-		table.row();
+		addSaves();
 
 		// Create the exit button
 		TextButton exit = new TextButton("Exit", skin);
@@ -150,7 +115,7 @@ public class MenuScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				System.out.println("up");
-				Gdx.app.exit();
+				main.setScreen(main.manager.getMenu());
 			}
 		});
 
@@ -169,12 +134,45 @@ public class MenuScreen implements Screen {
 		window.setFillParent(true);
 		window.row().fill().expandX();
 
-		window.add(table).fill().expand().maxHeight(Gdx.graphics.getHeight());
+		window.add(scrollPane).fill().expand()
+				.maxHeight(Gdx.graphics.getHeight());
 		window.row();
 		window.pack();
 
 		stage.addActor(window);
 		stage.act();
+	}
+
+	public void addSaves() {
+		FileHandle savePath = Gdx.files.local("saves");
+		FileHandle[] saves = savePath.list();
+		Player player;
+		TextButton button;
+		Json json = new Json();
+
+		for (FileHandle handle : saves) {
+
+			player = json.fromJson(Player.class, handle);
+
+			// Create the exit button
+			button = new TextButton(player.getName(), skin);
+			button.addListener(new InputListener() {
+				public boolean touchDown(InputEvent event, float x, float y,
+						int pointer, int button) {
+					System.out.println("down");
+					return true;
+				}
+
+				public void touchUp(InputEvent event, float x, float y,
+						int pointer, int button) {
+					System.out.println("up");
+					main.setScreen(main.manager.getGame());
+					// main.manager.getGame().setPlayer(player);
+				}
+			});
+
+			table.add(button).align(Align.center).row();
+		}
 	}
 
 	@Override
