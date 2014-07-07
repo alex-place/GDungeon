@@ -1,4 +1,4 @@
-package com.undeadstudio.gdungeon.screens.game;
+package com.undeadstudio.gdungeon.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -60,7 +60,7 @@ public class LoadScreen implements Screen {
 		batch = new SpriteBatch();
 
 		skin = new Skin();
-		skin.add("default-font", Assets.instance.fonts.medium);
+		skin.add("default-font", main.options.getPrefferedFont());
 		skin.addRegions(new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 		skin.load(Gdx.files.internal("ui/uiskin.json"));
 

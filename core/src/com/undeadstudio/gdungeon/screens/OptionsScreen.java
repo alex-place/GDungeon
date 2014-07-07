@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -21,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
 
 public class OptionsScreen implements Screen {
@@ -103,10 +103,13 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void show() {
+		loadOptions();
+
 		batch = new SpriteBatch();
 
 		skin = new Skin();
-		skin.add("default-font", Assets.instance.fonts.medium);
+		skin.add("default-font", main.options.getPrefferedFont());
+
 		skin.addRegions(new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 		skin.load(Gdx.files.internal("ui/uiskin.json"));
 
@@ -117,20 +120,17 @@ public class OptionsScreen implements Screen {
 
 		displays = Gdx.graphics.getDisplayModes();
 
-		loadOptions();
-
 		table = new Table();
 		// table.debug();
 		table.center();
-		table.defaults().expandX().space(5).align(Align.center);
+		table.defaults().align(Align.center).fill().expand();
 
 		title = new Label("Options", skin);
 		title.setAlignment(Align.center);
-		table.add(title).colspan(3).expandY().align(Align.top).spaceTop(10)
-				.row();
+		table.add(title).row();
 
 		resolutionLbl = new Label("Resolution", skin);
-		table.add(resolutionLbl).align(Align.right);
+		table.add(resolutionLbl).row();
 
 		displayModes = new SelectBox<DisplayMode>(skin);
 		displayModes.setItems(displays);
@@ -139,24 +139,24 @@ public class OptionsScreen implements Screen {
 		table.add(displayModes).row();
 
 		sfx = new Label("Sound Effects", skin);
-		table.add(sfx).align(Align.right).spaceRight(10);
+		table.add(sfx).row();
 
 		sfxSlider = new Slider(0, 100, 1, false, skin);
 		sfxSlider.setValue(sfxVolume);
-		table.add(sfxSlider).fillX().align(Align.center);
+		table.add(sfxSlider).row();
 
 		sfxVolumeLbl = new Label(sfxVolume + "", skin);
-		table.add(sfxVolumeLbl).align(Align.center).spaceLeft(10).row();
+		table.add(sfxVolumeLbl).row();
 
 		music = new Label("Music", skin);
-		table.add(music).align(Align.right).spaceRight(10);
+		table.add(music).row();
 
 		musicSlider = new Slider(0, 100, 1, false, skin);
 		musicSlider.setValue(musicVolume);
-		table.add(musicSlider).fillX().align(Align.center);
+		table.add(musicSlider).row();
 
 		musicVolumeLbl = new Label(musicVolume + "", skin);
-		table.add(musicVolumeLbl).align(Align.center).spaceLeft(10).row();
+		table.add(musicVolumeLbl).row();
 
 		fullscreenCheckBox = new CheckBox("Fullscreen", skin);
 		fullscreenCheckBox.setChecked(fullscreen);
@@ -169,7 +169,7 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		table.add(fullscreenCheckBox);
+		table.add(fullscreenCheckBox).row();
 
 		vsyncCheckBox = new CheckBox("VSync", skin);
 		vsyncCheckBox.setChecked(vsync);
@@ -182,7 +182,17 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		table.add(vsyncCheckBox).colspan(2).row();
+		table.add(vsyncCheckBox).row();
+
+		CheckBox font12 = new CheckBox("Font 12", skin);
+		CheckBox font16 = new CheckBox("Font 16", skin);
+		CheckBox font32 = new CheckBox("Font 32", skin);
+		ButtonGroup fontGroup = new ButtonGroup(font12, font16, font32);
+		fontGroup.setChecked("Font 12");
+
+		table.add(font12).row();
+		table.add(font16).row();
+		table.add(font32).row();
 
 		saveBtn = new TextButton("Save", skin);
 		saveBtn.addListener(new InputListener() {
@@ -199,8 +209,7 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		table.add(saveBtn).align(Align.center).colspan(3).spaceTop(20)
-				.fill(0.5f, 0f).row();
+		table.add(saveBtn).row();
 
 		backBtn = new TextButton("Back", skin);
 		backBtn.addListener(new InputListener() {
@@ -218,8 +227,7 @@ public class OptionsScreen implements Screen {
 			}
 		});
 
-		table.add(backBtn).align(Align.center).colspan(3).spaceTop(20)
-				.fill(0.5f, 0f).row();
+		table.add(backBtn).row();
 
 		scrollPane = new ScrollPane(table, skin);
 		scrollPane.setFlickScroll(true);

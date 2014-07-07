@@ -10,6 +10,7 @@ public class Main extends Game {
 	public static final boolean DEBUG = true;
 	public VersionManager versionManager;
 	public PreferencesManager preferencesManager;
+	public OptionsManager options;
 	public static String LOG;
 	public ScreenManager manager = new ScreenManager(this);
 
@@ -18,12 +19,13 @@ public class Main extends Game {
 		Assets.instance.init(new AssetManager());
 		versionManager = new VersionManager();
 		preferencesManager = new PreferencesManager();
+		options = new OptionsManager(this);
 		LOG = "GDungeon v" + versionManager.getVersion();
 		Gdx.graphics.setTitle(Main.LOG);
 		versionManager.buildProject();
 
 		Gdx.app.log(LOG, "Launched successfully");
-		setScreen(manager.getLoadGame());
+		setScreen(manager.getNewGameScreen());
 
 	}
 

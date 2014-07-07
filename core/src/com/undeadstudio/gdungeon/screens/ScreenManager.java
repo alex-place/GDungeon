@@ -2,8 +2,6 @@ package com.undeadstudio.gdungeon.screens;
 
 import com.badlogic.gdx.Screen;
 import com.undeadstudio.gdungeon.Main;
-import com.undeadstudio.gdungeon.screens.charactercreation.CharacterCreationScreen;
-import com.undeadstudio.gdungeon.screens.game.GameScreen;
 
 /**
  * Overly complex way of managing a single instance of any given screen while

@@ -8,12 +8,12 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.undeadstudio.gdungeon.Main;
 
 public class DesktopLauncher {
-	
+
 	private static boolean rebuildAtlas = true;
 	private static boolean drawDebugOutline = false;
-	
+
 	public static void main(String[] arg) {
-		
+
 		if (rebuildAtlas) {
 			Settings settings = new Settings();
 			settings.maxWidth = 1024;
@@ -21,12 +21,18 @@ public class DesktopLauncher {
 			settings.debug = drawDebugOutline;
 			TexturePacker.processIfModified(settings, "assets-raw",
 					"../android/assets/images", "dungeon.pack");
+		
+		
 		}
 		
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.width = 480;
+		config.height = 320;
+
 		DisplayMode[] modes = LwjglApplicationConfiguration.getDisplayModes();
-		DisplayMode best = modes[modes.length-1];
-		//config.setFromDisplayMode(best);
+		DisplayMode best = modes[modes.length - 1];
+		// config.setFromDisplayMode(best);
 		new LwjglApplication(new Main(), config);
 
 	}

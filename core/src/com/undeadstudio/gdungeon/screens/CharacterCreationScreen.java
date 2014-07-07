@@ -1,16 +1,19 @@
-package com.undeadstudio.gdungeon.screens.charactercreation;
+package com.undeadstudio.gdungeon.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -20,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
 import com.undeadstudio.gdungeon.Player;
@@ -37,14 +41,15 @@ public class CharacterCreationScreen implements Screen {
 
 	InputMultiplexer input;
 
-	int columns = 9;
+	int columns = 3;
 
 	String rougeDescription = "For rogues, the only code is the contract, and their honor is purchased in gold. Free from the constraints of a conscience, these mercenaries rely on brutal and efficient tactics. Lethal assassins and masters of stealth, they will approach their marks from behind, piercing a vital organ and vanishing into the shadows before the victim hits the ground.";
+	String warriorDescription = "For as long as war has raged, heroes from every race have aimed to master the art of battle. Warriors combine strength, leadership, and a vast knowledge of arms and armor to wreak havoc in glorious combat. They can unleash their rage at the closest threat with a variety of deadly weapons.";
+	String wizardDescription = "Students gifted with a keen intellect and unwavering discipline may walk the path of the mage. The arcane magic available to magi is both great and dangerous, and thus is revealed only to the most devoted practitioners. To keep enemies at bay, magi can summon bursts of fire to incinerate distant targets and cause entire areas to erupt, setting groups of foes ablaze.";
+
 	private Table table;
 	private Label title;
 	private Label className;
-	private TextButton left;
-	private TextButton right;
 	private TextField name;
 	private Label classDescription;
 	private TextButton menu;
@@ -76,11 +81,13 @@ public class CharacterCreationScreen implements Screen {
 		batch = new SpriteBatch();
 
 		skin = new Skin();
-		skin.add("default-font", Assets.instance.fonts.medium);
+		skin.add("default-font", main.options.getPrefferedFont());
 		skin.addRegions(new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 		skin.load(Gdx.files.internal("ui/uiskin.json"));
 
-		stage = new Stage();
+		OrthographicCamera camera = new OrthographicCamera(
+				Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		stage = new Stage(new ScreenViewport(camera));
 		input = new InputMultiplexer();
 		input.addProcessor(stage);
 		Gdx.input.setInputProcessor(input);
@@ -88,49 +95,24 @@ public class CharacterCreationScreen implements Screen {
 		table = new Table();
 		table.debug();
 		table.center();
-		table.defaults().pad(5).prefSize(Gdx.graphics.getHeight() - 100);
+		table.defaults().align(Align.center).fill().expand();
 
-		title = new Label("Character Creation", skin);
+		title = new Label("Choose your path", skin);
 		title.setAlignment(Align.center);
-		table.add(title).colspan(columns).row();
+		table.add(title).row();
 
 		className = new Label("Rouge", skin);
 		className.setAlignment(Align.center);
-		table.add();
+
 		table.add(className).align(Align.center).row();
 
-		left = new TextButton("<", skin);
+		Table classTable = new Table();
 
-		table.add(left).fill(0.5f, 1f).align(Align.right);
+		ButtonGroup classes = new ButtonGroup();
 
-		character = new Image(Assets.instance.rouge.rouge_0_0);
-
-		table.add(character).fill(false);// .fill(0.5f, 0f);
-
-		right = new TextButton(">", skin);
-
-		table.add(right).fill(0.5f, 1f).align(Align.left);
-
-		name = new TextField("", skin);
-		name.setMessageText("Name?");
-		table.add(name).fill(0f, 0.5f).align(Align.left).row();
-
-		classDescription = new Label("", skin);
-
-		classDescription.setText(rougeDescription);
-		classDescription.setWrap(true);
-		classDescription.setAlignment(Align.center);
-
-		ScrollPane desScroll = new ScrollPane(classDescription, skin);
-
-		desScroll.setScrollbarsOnTop(false);
-		desScroll.setFadeScrollBars(false);
-		desScroll.setScrollingDisabled(true, false);
-
-		table.add(desScroll).align(Align.center).colspan(columns).row();
-
-		menu = new TextButton("Back", skin);
-		menu.addListener(new InputListener() {
+		Button rougeBtn = new Button(
+				new Image(Assets.instance.rouge.rouge_0_0), skin);
+		rougeBtn.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 				System.out.println("down");
@@ -140,12 +122,74 @@ public class CharacterCreationScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				System.out.println("up");
-				main.setScreen(main.manager.getMenu());
+				classDescription.setText(rougeDescription);
+				className.setText("Rouge");
 
 			}
+
 		});
 
-		table.add(menu).colspan(3);
+		Button warriorBtn = new Button(new Image(
+				Assets.instance.warrior.warrior_0_0), skin);
+		warriorBtn.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("down");
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("up");
+				classDescription.setText(warriorDescription);
+				className.setText("Warrior");
+
+			}
+
+		});
+
+		Button wizardBtn = new Button(new Image(
+				Assets.instance.wizard.wizard_0_0), skin);
+		wizardBtn.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("down");
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("up");
+				classDescription.setText(wizardDescription);
+				className.setText("Wizard");
+
+			}
+
+		});
+
+		classes.add(rougeBtn, warriorBtn, wizardBtn);
+
+		classTable.add(rougeBtn, warriorBtn, wizardBtn);
+		table.add(classTable);
+
+		table.row();
+
+		// table.add(right).row().align(Align.left).row();
+
+		name = new TextField("", skin);
+		name.setMessageText("Name?");
+		table.add(name).fill(0f, 0.5f).align(Align.center).row();
+
+		classDescription = new Label("", skin);
+
+		classDescription.setText(rougeDescription);
+		classDescription.setWrap(true);
+		classDescription.setAlignment(Align.center);
+
+		ScrollPane desScroll = new ScrollPane(classDescription, skin);
+
+		table.add(desScroll).align(Align.center)
+				.expand(Gdx.graphics.getWidth() - 20, 0).fill(0.8f, 0f).row();
 
 		finished = new TextButton("Finished", skin);
 		finished.addListener(new InputListener() {
@@ -163,8 +207,27 @@ public class CharacterCreationScreen implements Screen {
 
 		});
 
-		table.add(finished).colspan(3);
+		table.add(finished);
 
+		table.row();
+
+		menu = new TextButton("Back", skin);
+		menu.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("down");
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				System.out.println("up");
+				main.setScreen(main.manager.getMenu());
+
+			}
+		});
+
+		table.add(menu);
 		table.row();
 
 		window = new Table(skin);
@@ -203,6 +266,7 @@ public class CharacterCreationScreen implements Screen {
 
 		FileHandle playerFile = Gdx.files.local("saves/" + player.getName()
 				+ ".json");
+
 		playerFile.writeString(json.prettyPrint(player), false);
 
 	}
@@ -227,6 +291,7 @@ public class CharacterCreationScreen implements Screen {
 		stage.dispose();
 		skin.dispose();
 		batch.dispose();
+		txtChar.dispose();
 	}
 
 }

@@ -3,7 +3,6 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
 
 public class MenuScreen implements Screen {
@@ -57,7 +55,7 @@ public class MenuScreen implements Screen {
 		batch = new SpriteBatch();
 
 		skin = new Skin();
-		skin.add("default-font", Assets.instance.fonts.medium);
+		skin.add("default-font", main.options.getPrefferedFont());
 		skin.addRegions(new TextureAtlas(Gdx.files.internal("ui/uiskin.atlas")));
 		skin.load(Gdx.files.internal("ui/uiskin.json"));
 
@@ -71,8 +69,7 @@ public class MenuScreen implements Screen {
 		Table table = new Table();
 		// table.debug();
 		table.center();
-		table.defaults().minSize(Gdx.graphics.getHeight() / 8).pad(20)
-				.prefSize(Gdx.graphics.getHeight() - 100);
+		table.defaults().align(Align.center).fill().expand().space(10f);// .prefSize(Gdx.graphics.getHeight()
 
 		Label title = new Label("GDungeon Build #"
 				+ main.versionManager.getVersion(), skin);
@@ -97,7 +94,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		table.add(newGame).align(Align.center);
+		table.add(newGame);
 		table.row();// Create the new game button
 		TextButton loadGame = new TextButton("Load Game", skin);
 		loadGame.addListener(new InputListener() {
@@ -115,7 +112,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		table.add(loadGame).align(Align.center);
+		table.add(loadGame);
 		table.row();
 
 		// Create the options button
@@ -135,7 +132,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		table.add(options).align(Align.center);
+		table.add(options);
 		table.row();
 
 		// Create the exit button
@@ -154,7 +151,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 
-		table.add(exit).align(Align.center);
+		table.add(exit);
 		table.row();
 
 		scrollPane = new ScrollPane(table, skin);
@@ -169,7 +166,7 @@ public class MenuScreen implements Screen {
 		window.setFillParent(true);
 		window.row().fill().expandX();
 
-		window.add(table).fill().expand().maxHeight(Gdx.graphics.getHeight());
+		window.add(scrollPane).fill().expand().maxHeight(Gdx.graphics.getHeight());
 		window.row();
 		window.pack();
 
