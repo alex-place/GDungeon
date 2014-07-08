@@ -54,6 +54,7 @@ public class OptionsScreen implements Screen {
 	private Label resolutionLbl;
 	private Label sfx;
 	private Label music;
+	private ButtonGroup fontGroup;
 	private TextButton saveBtn;
 	private TextButton backBtn;
 	private Table window;
@@ -185,9 +186,12 @@ public class OptionsScreen implements Screen {
 		table.add(vsyncCheckBox).row();
 
 		CheckBox font12 = new CheckBox("Font 12", skin);
+		font12.setUserObject(12);
 		CheckBox font16 = new CheckBox("Font 16", skin);
+		font16.setUserObject(16);
 		CheckBox font32 = new CheckBox("Font 32", skin);
-		ButtonGroup fontGroup = new ButtonGroup(font12, font16, font32);
+		font32.setUserObject(32);
+		fontGroup = new ButtonGroup(font12, font16, font32);
 		fontGroup.setChecked("Font 12");
 
 		table.add(font12).row();
@@ -267,6 +271,8 @@ public class OptionsScreen implements Screen {
 		options.putFloat("sfxVolume", sfxVolume);
 		options.putBoolean("fullscreen", fullscreen);
 		options.putBoolean("vsync", vsync);
+		
+options.putInteger("fontSize", (Integer) fontGroup.getChecked().getUserObject());		
 
 		options.flush();
 

@@ -27,8 +27,8 @@ public class DesktopLauncher {
 		
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 480;
-		config.height = 320;
+		config.width = 1196;
+		config.height = 720;
 
 		DisplayMode[] modes = LwjglApplicationConfiguration.getDisplayModes();
 		DisplayMode best = modes[modes.length - 1];

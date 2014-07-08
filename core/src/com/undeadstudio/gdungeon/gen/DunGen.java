@@ -1,8 +1,5 @@
 package com.undeadstudio.gdungeon.gen;
 
-import java.util.Date;
-import java.util.Random;
-
 import com.badlogic.gdx.math.MathUtils;
 
 // http://roguebasin.roguelikedevelopment.org/index.php?title=Dungeon-Building_Algorithm
@@ -105,29 +102,29 @@ public class DunGen {
 	// perhaps it's the same date as the unix epoch
 
 	private int getRand(int min, int max) {
-		
+
 		return MathUtils.random(min, max);
 
-//		// the seed is based on current date and the old, already used seed
-//		Date now = new Date();
-//
-//		long seed = now.getTime() + oldseed;
-//
-//		oldseed = seed;
-//
-//		Random randomizer = new Random(seed);
-//
-//		int n = max - min + 1;
-//
-//		int i = randomizer.nextInt(n);
-//
-//		if (i < 0)
-//
-//			i = -i;
-//
-//		// System.out.println("seed: " + seed + "\tnum:  " + (min + i));
-//
-//		return min + i;
+		// // the seed is based on current date and the old, already used seed
+		// Date now = new Date();
+		//
+		// long seed = now.getTime() + oldseed;
+		//
+		// oldseed = seed;
+		//
+		// Random randomizer = new Random(seed);
+		//
+		// int n = max - min + 1;
+		//
+		// int i = randomizer.nextInt(n);
+		//
+		// if (i < 0)
+		//
+		// i = -i;
+		//
+		// // System.out.println("seed: " + seed + "\tnum:  " + (min + i));
+		//
+		// return min + i;
 
 	}
 
@@ -505,7 +502,8 @@ public class DunGen {
 
 	// used to print the map on the screen
 
-	public void showDungeon() {
+	public String showDungeon() {
+		String dungeon = "";
 
 		for (int y = 0; y < ysize; y++) {
 
@@ -518,60 +516,69 @@ public class DunGen {
 				case tileUnused:
 
 					System.out.print(" ");
+					dungeon += Tile.AIR;
 
 					break;
 
 				case tileDirtWall:
 
 					System.out.print("+");
+					dungeon += Tile.WALL_DIRT;
 
 					break;
 
 				case tileDirtFloor:
 
 					System.out.print(".");
+					dungeon += Tile.FLOOR_DIRT;
 
 					break;
 
 				case tileStoneWall:
 
 					System.out.print("O");
+					dungeon += Tile.WALL_STONE;
 
 					break;
 
 				case tileCorridor:
 
 					System.out.print("#");
+					dungeon += Tile.CORRIDOR;
 
 					break;
 
 				case tileDoor:
 
 					System.out.print("D");
+					dungeon += Tile.DOOR;
 
 					break;
 
 				case tileUpStairs:
 
 					System.out.print("<");
+					dungeon += Tile.STAIRS_UP;
 
 					break;
 
 				case tileDownStairs:
 
 					System.out.print(">");
+					dungeon += Tile.STAIRS_DOWN;
 
 					break;
 
 				case tileChest:
 
 					System.out.print("*");
+					dungeon += Tile.CHEST_UNOPENED;
 
 					break;
-					
-					default:
-						System.out.print("?");
 
+				default:
+					System.out.print("?");
+					dungeon += Tile.UNKNOWN;
 
 				}
 				;
@@ -579,9 +586,12 @@ public class DunGen {
 			}
 
 			System.out.println();
+			dungeon += "\n";
 
 		}
 
+		System.out.println(dungeon);
+		return dungeon;
 	}
 
 	// and here's the one generating the whole map
@@ -941,6 +951,28 @@ public class DunGen {
 		System.out.println(msgNumObjects + currentFeatures);
 
 		return true;
+
+	}
+
+	public String newDungeon() {
+		// initial stuff used in making the map
+
+		int x = 80;
+		int y = 25;
+		int dungeon_objects = 0;
+
+		// create a new class of "dungen", so we can use all the goodies within
+		// it
+
+		DunGen generator = new DunGen();
+
+		// then we create a new dungeon map
+
+		generator.createDungeon(x, y, dungeon_objects);
+
+		// always good to be able to see the results..
+
+		return generator.showDungeon();
 
 	}
 

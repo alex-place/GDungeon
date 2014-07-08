@@ -20,9 +20,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
-import com.undeadstudio.gdungeon.Player;
+import com.undeadstudio.gdungeon.screens.game.Player;
 
 public class LoadScreen implements Screen {
+
+	Player player;
 
 	Main main;
 	Stage stage;
@@ -33,8 +35,6 @@ public class LoadScreen implements Screen {
 	Table table;
 
 	InputMultiplexer input;
-	int animals = 8;
-
 	public LoadScreen(Main main) {
 		this.main = main;
 	}
@@ -146,7 +146,6 @@ public class LoadScreen implements Screen {
 	public void addSaves() {
 		FileHandle savePath = Gdx.files.local("saves");
 		FileHandle[] saves = savePath.list();
-		Player player;
 		TextButton button;
 		Json json = new Json();
 
@@ -166,13 +165,20 @@ public class LoadScreen implements Screen {
 				public void touchUp(InputEvent event, float x, float y,
 						int pointer, int button) {
 					System.out.println("up");
-					main.setScreen(main.manager.getGame());
-					// main.manager.getGame().setPlayer(player);
+					load();
+
 				}
 			});
 
 			table.add(button).align(Align.center).row();
 		}
+	}
+
+	public void load() {
+		main.manager.getGame().setPlayer(player);
+
+		main.setScreen(main.manager.getGame());
+		// main.manager.getGame().setPlayer(player);
 	}
 
 	@Override

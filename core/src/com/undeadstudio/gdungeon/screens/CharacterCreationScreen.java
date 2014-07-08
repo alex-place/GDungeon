@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
-import com.undeadstudio.gdungeon.Player;
+import com.undeadstudio.gdungeon.screens.game.Player;
 
 public class CharacterCreationScreen implements Screen {
 
@@ -168,9 +168,9 @@ public class CharacterCreationScreen implements Screen {
 		});
 
 		classes.add(rougeBtn, warriorBtn, wizardBtn);
-
+		classTable.defaults().fill().expand().fill(1f, 1f);
 		classTable.add(rougeBtn, warriorBtn, wizardBtn);
-		table.add(classTable);
+		table.add(classTable).fillY().expandY().fill(0.8f, 1f);
 
 		table.row();
 
@@ -178,7 +178,9 @@ public class CharacterCreationScreen implements Screen {
 
 		name = new TextField("", skin);
 		name.setMessageText("Name?");
-		table.add(name).fill(0f, 0.5f).align(Align.center).row();
+		name.setMaxLength(25);
+		table.add(name).expandX().fillX().fill(0.8f, 0.5f).align(Align.center)
+				.row();
 
 		classDescription = new Label("", skin);
 
@@ -189,7 +191,7 @@ public class CharacterCreationScreen implements Screen {
 		ScrollPane desScroll = new ScrollPane(classDescription, skin);
 
 		table.add(desScroll).align(Align.center)
-				.expand(Gdx.graphics.getWidth() - 20, 0).fill(0.8f, 0f).row();
+				.expand(Gdx.graphics.getWidth() - 20, 1).fill(0.8f, 1f).row();
 
 		finished = new TextButton("Finished", skin);
 		finished.addListener(new InputListener() {
@@ -207,7 +209,7 @@ public class CharacterCreationScreen implements Screen {
 
 		});
 
-		table.add(finished);
+		table.add(finished).fill(0.5f, 1f);
 
 		table.row();
 
@@ -227,7 +229,7 @@ public class CharacterCreationScreen implements Screen {
 			}
 		});
 
-		table.add(menu);
+		table.add(menu).fill(0.5f, 1f);
 		table.row();
 
 		window = new Table(skin);
@@ -260,6 +262,8 @@ public class CharacterCreationScreen implements Screen {
 		player.setHealth(70);
 		player.setAp(3);
 		player.setSp(6);
+		
+		player.setLevel(main.preferencesManager.getOptions().getString("lvl1"));
 
 		Json json = new Json();
 		System.out.println(json.prettyPrint(player));

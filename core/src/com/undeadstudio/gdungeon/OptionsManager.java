@@ -31,4 +31,8 @@ public class OptionsManager {
 
 		return preferredFont;
 	}
+
+	public void setPreferredFont(BitmapFont preferredFont) {
+		this.preferredFont = preferredFont;
+	}
 }

@@ -69,13 +69,13 @@ public class MenuScreen implements Screen {
 		Table table = new Table();
 		// table.debug();
 		table.center();
-		table.defaults().align(Align.center).fill().expand().space(10f);// .prefSize(Gdx.graphics.getHeight()
+		table.defaults().align(Align.center).fill(0.8f, 0.8f).expand().space(10f);// .prefSize(Gdx.graphics.getHeight()
 
 		Label title = new Label("GDungeon Build #"
 				+ main.versionManager.getVersion(), skin);
 		title.setAlignment(Align.center);
-		table.add(title);
-		table.row();
+//		table.add(title);
+//		table.row();
 
 		// Create the new game button
 		TextButton newGame = new TextButton("New Game", skin);
@@ -164,9 +164,11 @@ public class MenuScreen implements Screen {
 		Table window = new Table(skin);
 		window.debug();
 		window.setFillParent(true);
-		window.row().fill().expandX();
+		window.defaults();//.fill().expand((int) (Gdx.graphics.getWidth() * 0.8), Gdx.graphics.getHeight());
 
-		window.add(scrollPane).fill().expand().maxHeight(Gdx.graphics.getHeight());
+		window.add(title).fillY().expandY().row();
+		window.add(scrollPane).align(Align.center)
+		.expand(Gdx.graphics.getWidth() - 20, 1).fill(0.8f, 1f).row();;//.maxHeight(Gdx.graphics.getHeight());
 		window.row();
 		window.pack();
 

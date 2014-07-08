@@ -1,4 +1,6 @@
-package com.undeadstudio.gdungeon;
+package com.undeadstudio.gdungeon.screens.game;
+
+import com.badlogic.gdx.Gdx;
 
 public class Player {
 
@@ -15,6 +17,20 @@ public class Player {
 	private float ap;
 
 	private String startingClass;
+
+	private String level;
+
+	public Player() {
+		level = Gdx.files.local("levels/1.lvl").readString();
+	}
+
+	public String getLevel() {
+		return level;
+	}
+
+	public void setLevel(String level) {
+		this.level = level;
+	}
 
 	public String getStartingClass() {
 		return startingClass;
