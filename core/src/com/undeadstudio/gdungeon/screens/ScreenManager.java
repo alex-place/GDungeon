@@ -20,8 +20,7 @@ public class ScreenManager {
 		menu = new MenuScreen(main);
 		newGame = new CharacterCreationScreen(main);
 		options = new OptionsScreen(main);
-		game = new GameScreen();
-		game.setMain(main);
+		game = new GameScreen(main);
 		load = new LoadScreen(main);
 		this.main = main;
 	}

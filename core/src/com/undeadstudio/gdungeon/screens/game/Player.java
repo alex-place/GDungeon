@@ -1,91 +1,35 @@
 package com.undeadstudio.gdungeon.screens.game;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-
 	private String name;
 
-	private int x;
+	public Vector2 position;
 
-	private int y;
-
-	private float health;
-
-	private float sp;
-
-	private float ap;
-
-	private String startingClass;
-
-	private String level;
-
-	public Player() {
-		level = Gdx.files.local("levels/1.lvl").readString();
+	public Player(String name, Vector2 position) {
+		this.name = name;
+		this.position = position;
 	}
 
-	public String getLevel() {
-		return level;
+	public Player(String name) {
+		this(name, new Vector2());
+		
 	}
 
-	public void setLevel(String level) {
-		this.level = level;
+	public Vector2 getPosition() {
+		return position;
 	}
 
-	public String getStartingClass() {
-		return startingClass;
-	}
-
-	public void setStartingClass(String startingClass) {
-		this.startingClass = startingClass;
-	}
-
-	public float getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
+	public void setPosition(Vector2 position) {
+		this.position = position;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	enum State {
+		up, down, left, right
 	}
-
-	public float getHealth() {
-		return health;
-	}
-
-	public void setHealth(float health) {
-		this.health = health;
-	}
-
-	public float getSp() {
-		return sp;
-	}
-
-	public void setSp(float sp) {
-		this.sp = sp;
-	}
-
-	public float getAp() {
-		return ap;
-	}
-
-	public void setAp(float ap) {
-		this.ap = ap;
-	}
-
 }

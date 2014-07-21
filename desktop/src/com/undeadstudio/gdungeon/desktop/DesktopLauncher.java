@@ -4,6 +4,8 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePackerFileProcessor;
+import com.badlogic.gdx.tools.texturepacker.TexturePackerTest;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.undeadstudio.gdungeon.Main;
 

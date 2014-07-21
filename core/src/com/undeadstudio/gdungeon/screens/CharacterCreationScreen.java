@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
+import com.undeadstudio.gdungeon.gen.DunGen;
 import com.undeadstudio.gdungeon.screens.game.Player;
 
 public class CharacterCreationScreen implements Screen {
@@ -148,6 +150,7 @@ public class CharacterCreationScreen implements Screen {
 
 		});
 
+		warriorBtn.setColor(Color.GREEN);
 		Button wizardBtn = new Button(new Image(
 				Assets.instance.wizard.wizard_0_0), skin);
 		wizardBtn.addListener(new InputListener() {
@@ -247,28 +250,24 @@ public class CharacterCreationScreen implements Screen {
 	}
 
 	public void finishedWithCreation() {
-		if (!name.getText().isEmpty()) {
+		if (!name.getText().isEmpty()
+				&& !Gdx.files.local("saves/" + name.getText() + ".json")
+						.exists()) {
 			createCharacter();
 			main.setScreen(main.manager.getGame());
+		} else {
+
 		}
+
 	}
 
 	public void createCharacter() {
-		Player player = new Player();
-		player.setStartingClass(className.getText().toString());
-		player.setX(-1);
-		player.setY(-1);
-		player.setName(name.getText());
-		player.setHealth(70);
-		player.setAp(3);
-		player.setSp(6);
-		
-		player.setLevel(main.preferencesManager.getOptions().getString("lvl1"));
+		Player player = new Player(name.getText());
 
 		Json json = new Json();
 		System.out.println(json.prettyPrint(player));
 
-		FileHandle playerFile = Gdx.files.local("saves/" + player.getName()
+		FileHandle playerFile = Gdx.files.local("saves/" + name.getText()
 				+ ".json");
 
 		playerFile.writeString(json.prettyPrint(player), false);

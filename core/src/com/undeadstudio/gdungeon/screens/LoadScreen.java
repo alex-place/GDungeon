@@ -153,7 +153,7 @@ public class LoadScreen implements Screen {
 
 			player = json.fromJson(Player.class, handle);
 
-			// Create the exit button
+			// Create the exit button 
 			button = new TextButton(player.getName(), skin);
 			button.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y,
@@ -175,8 +175,6 @@ public class LoadScreen implements Screen {
 	}
 
 	public void load() {
-		main.manager.getGame().setPlayer(player);
-
 		main.setScreen(main.manager.getGame());
 		// main.manager.getGame().setPlayer(player);
 	}
