@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
+import com.undeadstudio.gdungeon.screens.game.EntityManager;
 import com.undeadstudio.gdungeon.screens.game.GameInput;
 import com.undeadstudio.gdungeon.screens.game.Player;
 
@@ -18,13 +19,14 @@ public class GameScreen implements Screen {
 
 	Main main;
 	GameInput input;
+	public EntityManager manager;
 
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
 	private OrthographicCamera camera;
-	private Texture playerTexture;
-	
-	Player player;
+	private AtlasRegion playerTexture;
+
+	private Player player;
 
 	public GameScreen(Main main) {
 		this.main = main;
@@ -33,11 +35,13 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		input = new GameInput(this);
-		playerTexture = Assets.instance.rouge.rouge_0_0.getTexture();
+		Gdx.input.setInputProcessor(input);
+		manager = new EntityManager(this);
+		playerTexture = Assets.instance.rouge.rouge_0_0;
 		map = new TmxMapLoader().load("maps/tiled/test.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / 16f);
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 30, 20);
+		camera = new OrthographicCamera(10, 10);
+		camera.setToOrtho(false, 10, 10);
 		camera.update();
 
 		// create the player we want to move around the world
@@ -55,21 +59,28 @@ public class GameScreen implements Screen {
 
 		camera.update();
 
-		// set the tile map rendere view based on what the
+		// set the tile map renderer view based on what the
 		// camera sees and render the map
 		renderer.setView(camera);
 		renderer.render();
 
 		Batch batch = renderer.getSpriteBatch();
 		batch.begin();
-			batch.draw(playerTexture, player.position.x, player.position.y, 1, 1);
+		batch.draw(playerTexture, player.position.x, player.position.y, 1, 1);
 		batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		show();
+	}
 
+	public Player getPlayer() {
+		return player;
+	}
+
+	public OrthographicCamera getCamera() {
+		return camera;
 	}
 
 	@Override
