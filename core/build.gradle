@@ -5,7 +5,7 @@ sourceCompatibility = 1.6
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-
+dependencies { compile "com.badlogicgames.ashley:ashley:1.0.1" } 
 eclipse.project {
     name = appName + "-core"
 }

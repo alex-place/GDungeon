@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.undeadstudio.gdungeon.Assets;
@@ -60,6 +61,10 @@ public class GameScreen implements Screen {
 		player.position.set(0, 1);
 
 		helper.setTarget(player);
+		
+					TiledMapTileLayer layer = (TiledMapTileLayer)map.getLayers().get(1);
+					layer.getCell(0, 0);
+
 	}
 
 	@Override
