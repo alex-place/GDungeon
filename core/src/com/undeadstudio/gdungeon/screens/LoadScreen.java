@@ -18,13 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
-import com.undeadstudio.gdungeon.screens.game.Player;
 
 public class LoadScreen implements Screen {
-
-	Player player;
 
 	Main main;
 	Stage stage;
@@ -35,6 +31,7 @@ public class LoadScreen implements Screen {
 	Table table;
 
 	InputMultiplexer input;
+
 	public LoadScreen(Main main) {
 		this.main = main;
 	}
@@ -46,8 +43,7 @@ public class LoadScreen implements Screen {
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-		Table.drawDebug(stage);
-
+		stage.setDebugAll(true);
 	}
 
 	@Override
@@ -151,10 +147,10 @@ public class LoadScreen implements Screen {
 
 		for (FileHandle handle : saves) {
 
-			player = json.fromJson(Player.class, handle);
+			// player = json.fromJson(Player.class, handle);
 
-			// Create the exit button 
-			button = new TextButton(player.getName(), skin);
+			// Create the exit button
+			button = new TextButton("Alex", skin);
 			button.addListener(new InputListener() {
 				public boolean touchDown(InputEvent event, float x, float y,
 						int pointer, int button) {
@@ -175,7 +171,7 @@ public class LoadScreen implements Screen {
 	}
 
 	public void load() {
-		main.setScreen(main.manager.getGame());
+		main.setScreen(main.manager.getAshleyGame());
 		// main.manager.getGame().setPlayer(player);
 	}
 

@@ -3,7 +3,6 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -23,12 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
-import com.undeadstudio.gdungeon.gen.DunGen;
-import com.undeadstudio.gdungeon.screens.game.Player;
 
 public class CharacterCreationScreen implements Screen {
 
@@ -69,7 +65,7 @@ public class CharacterCreationScreen implements Screen {
 
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
-		Table.drawDebug(stage);
+		stage.setDebugAll(true);
 
 	}
 
@@ -254,7 +250,7 @@ public class CharacterCreationScreen implements Screen {
 				&& !Gdx.files.local("saves/" + name.getText() + ".json")
 						.exists()) {
 			createCharacter();
-			main.setScreen(main.manager.getGame());
+			main.setScreen(main.manager.getAshleyGame());
 		} else {
 
 		}
@@ -262,15 +258,15 @@ public class CharacterCreationScreen implements Screen {
 	}
 
 	public void createCharacter() {
-		Player player = new Player(name.getText());
-
-		Json json = new Json();
-		System.out.println(json.prettyPrint(player));
-
-		FileHandle playerFile = Gdx.files.local("saves/" + name.getText()
-				+ ".json");
-
-		playerFile.writeString(json.prettyPrint(player), false);
+		// Player player = new Player(name.getText());
+		//
+		// Json json = new Json();
+		// System.out.println(json.prettyPrint(player));
+		//
+		// FileHandle playerFile = Gdx.files.local("saves/" + name.getText()
+		// + ".json");
+		//
+		// playerFile.writeString(json.prettyPrint(player), false);
 
 	}
 

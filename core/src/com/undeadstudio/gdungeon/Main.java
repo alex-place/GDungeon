@@ -25,7 +25,7 @@ public class Main extends Game {
 		versionManager.buildProject();
 
 		Gdx.app.log(LOG, "Launched successfully");
-		setScreen(manager.getGame());
+		setScreen(manager.getAshleyGame());
 
 	}
 

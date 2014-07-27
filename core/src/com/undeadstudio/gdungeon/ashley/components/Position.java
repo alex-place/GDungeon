@@ -1,4 +1,4 @@
-package com.undeadstudio.gdungeon.ashley;
+package com.undeadstudio.gdungeon.ashley.components;
 
 import com.badlogic.ashley.core.Component;
 

@@ -13,15 +13,15 @@ public class ScreenManager {
 	private MenuScreen menu;
 	private CharacterCreationScreen newGame;
 	private OptionsScreen options;
-	private GameScreen game;
 	private LoadScreen load;
+	private AshleyGameScreen ashleyGame;
 
 	public ScreenManager(Main main) {
 		menu = new MenuScreen(main);
 		newGame = new CharacterCreationScreen(main);
 		options = new OptionsScreen(main);
-		game = new GameScreen(main);
 		load = new LoadScreen(main);
+		ashleyGame = new AshleyGameScreen(main);
 		this.main = main;
 	}
 
@@ -34,16 +34,14 @@ public class ScreenManager {
 	}
 
 	public OptionsScreen getOptionsScreen() {
-		// TODO Auto-generated method stub
 		return options;
 	}
 
-	public GameScreen getGame() {
-		return game;
+	public AshleyGameScreen getAshleyGame() {
+		return ashleyGame;
 	}
 
 	public Screen getLoadGame() {
-		// TODO Auto-generated method stub
 		return load;
 	}
 
