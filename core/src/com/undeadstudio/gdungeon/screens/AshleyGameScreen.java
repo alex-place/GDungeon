@@ -3,6 +3,8 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,9 +13,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.undeadstudio.gdungeon.Assets;
 import com.undeadstudio.gdungeon.Main;
+import com.undeadstudio.gdungeon.ashley.components.InputComponent;
 import com.undeadstudio.gdungeon.ashley.components.MovementComponent;
 import com.undeadstudio.gdungeon.ashley.components.PositionComponent;
 import com.undeadstudio.gdungeon.ashley.components.VisualComponent;
+import com.undeadstudio.gdungeon.ashley.systems.InputSystem;
 import com.undeadstudio.gdungeon.ashley.systems.MovementSystem;
 import com.undeadstudio.gdungeon.ashley.systems.RenderSystem;
 
@@ -21,6 +25,8 @@ public class AshleyGameScreen implements Screen {
 
 	Main main;
 	PooledEngine engine;
+	OrthographicCamera camera;
+	InputMultiplexer input;
 
 	public AshleyGameScreen(Main main) {
 		this.main = main;
@@ -28,6 +34,9 @@ public class AshleyGameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+
+		Gdx.input.setInputProcessor(input);
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -36,24 +45,32 @@ public class AshleyGameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		OrthographicCamera camera = new OrthographicCamera(640, 480);
+		camera = new OrthographicCamera(640, 480);
 		camera.position.set(320, 240, 0);
 		camera.update();
 
-		Texture crateTexture = new Texture("crate.png");
 		Texture coinTexture = new Texture("coin.png");
-		
-		
+
+		input = new InputMultiplexer();
 
 		engine = new PooledEngine();
 		engine.addSystem(new RenderSystem(camera));
 		engine.addSystem(new MovementSystem());
+		engine.addSystem(new InputSystem(input));
 
-		Entity crate = engine.createEntity();
-		crate.add(new PositionComponent(50, 50));
-		crate.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
+		Entity rouge = engine.createEntity();
+		rouge.add(new PositionComponent(50, 50));
+		rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
+		rouge.add(new InputComponent(new InputAdapter() {
 
-		engine.addEntity(crate);
+			@Override
+			public boolean keyDown(int keycode) {
+				Gdx.app.log("Game", "I hear you loud and clear!");
+				return super.keyDown(keycode);
+			}
+		}));
+
+		engine.addEntity(rouge);
 
 		TextureRegion coinRegion = new TextureRegion(coinTexture);
 
@@ -65,6 +82,7 @@ public class AshleyGameScreen implements Screen {
 			coin.add(new VisualComponent(coinRegion));
 			engine.addEntity(coin);
 		}
+		Gdx.input.setInputProcessor(input);
 	}
 
 	@Override

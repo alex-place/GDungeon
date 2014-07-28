@@ -28,19 +28,23 @@ import com.undeadstudio.gdungeon.ashley.components.VisualComponent;
 
 public class RenderSystem extends EntitySystem {
 	private ImmutableIntMap<Entity> entities;
-	
+
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
-	
-	public RenderSystem(OrthographicCamera camera){
+
+	private PositionComponent position;
+	private VisualComponent visual;
+
+	public RenderSystem(OrthographicCamera camera) {
 		batch = new SpriteBatch();
-		
+
 		this.camera = camera;
 	}
 
 	@Override
 	public void addedToEngine(Engine engine) {
-		entities = engine.getEntitiesFor(Family.getFamilyFor(PositionComponent.class, VisualComponent.class));
+		entities = engine.getEntitiesFor(Family.getFamilyFor(
+				PositionComponent.class, VisualComponent.class));
 	}
 
 	@Override
@@ -50,21 +54,19 @@ public class RenderSystem extends EntitySystem {
 
 	@Override
 	public void update(float deltaTime) {
-		PositionComponent position;
-		VisualComponent visual;
-		
+
 		camera.update();
-		
+
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
-		
+
 		for (Entity e : entities.values()) {
 			position = e.getComponent(PositionComponent.class);
 			visual = e.getComponent(VisualComponent.class);
-			
+
 			batch.draw(visual.region, position.x, position.y);
 		}
-		
+
 		batch.end();
 	}
 }
