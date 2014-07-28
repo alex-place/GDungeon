@@ -19,23 +19,25 @@ package com.undeadstudio.gdungeon.ashley.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.math.MathUtils;
 import com.undeadstudio.gdungeon.ashley.components.MovementComponent;
 import com.undeadstudio.gdungeon.ashley.components.PositionComponent;
 
 public class MovementSystem extends IteratingSystem {
 	PositionComponent position;
 	MovementComponent movement;
-	
+
 	public MovementSystem() {
-		super(Family.getFamilyFor(PositionComponent.class, MovementComponent.class));
+		super(Family.getFamilyFor(PositionComponent.class,
+				MovementComponent.class));
 	}
 
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
 		position = entity.getComponent(PositionComponent.class);
 		movement = entity.getComponent(MovementComponent.class);
-		
-		position.x += movement.velocityX * deltaTime;
-		position.y += movement.velocityY * deltaTime;
+
+		position.x += movement.velocityX * deltaTime * MathUtils.random(-5, 5);
+		position.y += movement.velocityY * deltaTime * MathUtils.random(-5, 5);
 	}
 }

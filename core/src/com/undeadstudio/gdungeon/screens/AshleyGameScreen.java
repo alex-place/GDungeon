@@ -17,6 +17,7 @@ import com.undeadstudio.gdungeon.ashley.components.InputComponent;
 import com.undeadstudio.gdungeon.ashley.components.MovementComponent;
 import com.undeadstudio.gdungeon.ashley.components.PositionComponent;
 import com.undeadstudio.gdungeon.ashley.components.VisualComponent;
+import com.undeadstudio.gdungeon.ashley.input.EntityController;
 import com.undeadstudio.gdungeon.ashley.systems.InputSystem;
 import com.undeadstudio.gdungeon.ashley.systems.MovementSystem;
 import com.undeadstudio.gdungeon.ashley.systems.RenderSystem;
@@ -45,8 +46,8 @@ public class AshleyGameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		camera = new OrthographicCamera(640, 480);
-		camera.position.set(320, 240, 0);
+		camera = new OrthographicCamera(10, 10);
+		camera.position.set(0, 0, 0);
 		camera.update();
 
 		Texture coinTexture = new Texture("coin.png");
@@ -59,16 +60,10 @@ public class AshleyGameScreen implements Screen {
 		engine.addSystem(new InputSystem(input));
 
 		Entity rouge = engine.createEntity();
-		rouge.add(new PositionComponent(50, 50));
+		rouge.add(new PositionComponent(0, 0));
+		rouge.add(new MovementComponent(0, 0));
 		rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
-		rouge.add(new InputComponent(new InputAdapter() {
-
-			@Override
-			public boolean keyDown(int keycode) {
-				Gdx.app.log("Game", "I hear you loud and clear!");
-				return super.keyDown(keycode);
-			}
-		}));
+		rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
 		engine.addEntity(rouge);
 
@@ -78,7 +73,7 @@ public class AshleyGameScreen implements Screen {
 			Entity coin = engine.createEntity();
 			coin.add(new PositionComponent(MathUtils.random(640), MathUtils
 					.random(480)));
-			coin.add(new MovementComponent(10.0f, 10.0f));
+			coin.add(new MovementComponent(5.0f, 5.0f));
 			coin.add(new VisualComponent(coinRegion));
 			engine.addEntity(coin);
 		}
