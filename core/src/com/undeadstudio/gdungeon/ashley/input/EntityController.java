@@ -15,19 +15,15 @@ public class EntityController extends InputAdapter implements GestureListener {
 	OrthographicCamera camera;
 	private Entity entity;
 	PositionComponent pos;
-	private Vector3 tmp;
 	float speed = 3;
 
 	public EntityController(OrthographicCamera camera, Entity entity) {
 		this.entity = entity;
-		this.camera = camera;
-		Gdx.app.log("GAME", "Input being taken! ????");
-
-	}
+		this.camera = camera;	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		tmp = new Vector3(screenX, screenY, 0);
+		Vector3 tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		touchDown(tmp.x, tmp.y, pointer, button);
 		Gdx.app.log("GAME", "Input being taken! ????");
@@ -37,7 +33,7 @@ public class EntityController extends InputAdapter implements GestureListener {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		tmp = new Vector3(screenX, screenY, 0);
+		Vector3 tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		// tap(tmp.x, tmp.y, 0, 0);
 		Gdx.app.log("GAME", "Input being taken! ????");
@@ -56,18 +52,18 @@ public class EntityController extends InputAdapter implements GestureListener {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		PositionComponent tmp = entity.getComponent(PositionComponent.class);
+		PositionComponent temp = entity.getComponent(PositionComponent.class);
 
 		switch (keycode) {
 		case Keys.SPACE:
-			camera.position.set(new Vector3(tmp.x, tmp.y, 0));
+			camera.position.set(new Vector3(temp.x +1, temp.y+1, 0));
 			Gdx.app.log("GAME", "Input being taken! ????");
 
 			break;
 
 		case Keys.UP:
 			camera.position.add(0, 1, 0);
-			
+
 		default:
 			break;
 		}

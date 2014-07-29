@@ -38,6 +38,8 @@ public class InputSystem extends EntitySystem {
 			inputComponent = entity.getComponent(InputComponent.class);
 			if (!inputComponent.isAdded()) {
 				input.addProcessor(inputComponent.getInput());
+				Gdx.app.log("Game", "processor #" + ++i);
+
 				inputComponent.setAdded(true);
 				Gdx.app.log("Game", "I hear you loud and clear! Entity#" + ++i);
 

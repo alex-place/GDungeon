@@ -3,6 +3,7 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -46,7 +47,6 @@ public class AshleyGameScreen implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		engine.update(Gdx.graphics.getDeltaTime());
-		input.getProcessors().toString();
 	}
 
 	@Override
@@ -55,14 +55,14 @@ public class AshleyGameScreen implements Screen {
 		camera.position.set(25, 25, 0);
 		camera.update();
 
+		input = new InputMultiplexer();
+
 		movement = new MovementSystem();
 		render = new RenderSystem(camera);
 		inputSys = new InputSystem(input);
 
 		Texture coinTexture = new Texture("coin.png");
 		TextureRegion coinRegion = new TextureRegion(coinTexture);
-
-		input = new InputMultiplexer();
 
 		engine = new PooledEngine();
 		engine.addSystem(render);
@@ -72,8 +72,7 @@ public class AshleyGameScreen implements Screen {
 		Entity rouge = engine.createEntity();
 		rouge.add(new PositionComponent(25, 25));
 		rouge.add(new MovementComponent(0, 0));
-		rouge.add(new VisualComponent(
-				(TextureRegion) Assets.instance.rouge.rouge_0_0));
+		rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
 		rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
 		engine.addEntity(rouge);
@@ -82,9 +81,9 @@ public class AshleyGameScreen implements Screen {
 			Entity coin = engine.createEntity();
 			coin.add(new PositionComponent(MathUtils.random(50), MathUtils
 					.random(50)));
-			//coin.add(new MovementComponent(5.0f, 5.0f));
+			coin.add(new MovementComponent(0f, 0f));
 			coin.add(new VisualComponent(coinRegion));
-			//coin.add(new InputComponent(new EntityController(camera, coin)));
+			// coin.add(new InputComponent(new EntityController(camera, coin)));
 			engine.addEntity(coin);
 		}
 

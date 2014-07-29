@@ -22,10 +22,13 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.undeadstudio.gdungeon.ashley.components.MovementComponent;
 import com.undeadstudio.gdungeon.ashley.components.PositionComponent;
+import com.undeadstudio.gdungeon.ashley.utils.Timer;
 
 public class MovementSystem extends IteratingSystem {
 	PositionComponent position;
 	MovementComponent movement;
+	float speed = 0.2f;
+	Timer timer = new Timer();
 
 	public MovementSystem() {
 		super(Family.getFamilyFor(PositionComponent.class,
@@ -36,10 +39,17 @@ public class MovementSystem extends IteratingSystem {
 	public void processEntity(Entity entity, float deltaTime) {
 		position = entity.getComponent(PositionComponent.class);
 		movement = entity.getComponent(MovementComponent.class);
+		if (timer.contains("time")) {
+			if (timer.getTime("time") > 500) {
+				movement.velocityX += MathUtils.random(-speed, speed);
+				movement.velocityY += MathUtils.random(-speed, speed);
+			}
+		} else {
+			timer.start("time");
+		}
 
-		position.x += movement.velocityX * deltaTime
-				* MathUtils.random(-10, 10);
-		position.y += movement.velocityY * deltaTime
-				* MathUtils.random(-10, 10);
+		position.x += movement.velocityX * deltaTime;
+		position.y += movement.velocityY * deltaTime;
+
 	}
 }
