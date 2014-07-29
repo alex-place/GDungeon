@@ -36,11 +36,10 @@ public class InputSystem extends EntitySystem {
 	public void update(float deltaTime) {
 		for (Entity entity : entities.values()) {
 			inputComponent = entity.getComponent(InputComponent.class);
-			// inputComponent.
 			if (!inputComponent.isAdded()) {
 				input.addProcessor(inputComponent.getInput());
 				inputComponent.setAdded(true);
-				Gdx.app.log("Game", "I hear you loud and clear!" + ++i);
+				Gdx.app.log("Game", "I hear you loud and clear! Entity#" + ++i);
 
 			}
 

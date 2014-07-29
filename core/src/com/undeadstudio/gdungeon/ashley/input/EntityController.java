@@ -1,6 +1,7 @@
 package com.undeadstudio.gdungeon.ashley.input;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,6 +21,8 @@ public class EntityController extends InputAdapter implements GestureListener {
 	public EntityController(OrthographicCamera camera, Entity entity) {
 		this.entity = entity;
 		this.camera = camera;
+		Gdx.app.log("GAME", "Input being taken! ????");
+
 	}
 
 	@Override
@@ -27,6 +30,8 @@ public class EntityController extends InputAdapter implements GestureListener {
 		tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		touchDown(tmp.x, tmp.y, pointer, button);
+		Gdx.app.log("GAME", "Input being taken! ????");
+
 		return false;
 	}
 
@@ -35,6 +40,8 @@ public class EntityController extends InputAdapter implements GestureListener {
 		tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		// tap(tmp.x, tmp.y, 0, 0);
+		Gdx.app.log("GAME", "Input being taken! ????");
+
 		return false;
 	}
 
@@ -42,19 +49,25 @@ public class EntityController extends InputAdapter implements GestureListener {
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		move(x, y);
+		Gdx.app.log("GAME", "Input being taken! ????");
+
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
+		PositionComponent tmp = entity.getComponent(PositionComponent.class);
+
 		switch (keycode) {
 		case Keys.SPACE:
-			PositionComponent tmp = entity
-					.getComponent(PositionComponent.class);
-
 			camera.position.set(new Vector3(tmp.x, tmp.y, 0));
+			Gdx.app.log("GAME", "Input being taken! ????");
+
 			break;
 
+		case Keys.UP:
+			camera.position.add(0, 1, 0);
+			
 		default:
 			break;
 		}
@@ -72,6 +85,7 @@ public class EntityController extends InputAdapter implements GestureListener {
 		pos = entity.getComponent(PositionComponent.class);
 		pos.x = x;
 		pos.y = y;
+		Gdx.app.log("GAME", "Input being taken!");
 	}
 
 	@Override

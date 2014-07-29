@@ -16,8 +16,6 @@
 
 package com.badlogic.ashley.tests.systems;
 
-import java.awt.List;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
@@ -25,6 +23,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.tests.components.PositionComponent;
 import com.badlogic.ashley.tests.components.VisualComponent;
 import com.badlogic.ashley.utils.ImmutableIntMap;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -38,12 +37,15 @@ public class RenderSystem extends EntitySystem {
 		batch = new SpriteBatch();
 
 		this.camera = camera;
+		Gdx.app.log("GAME", "WTF IS HAPPENING?");
+
 	}
 
 	@Override
 	public void addedToEngine(Engine engine) {
 		entities = engine.getEntitiesFor(Family.getFamilyFor(
 				PositionComponent.class, VisualComponent.class));
+
 	}
 
 	@Override
@@ -64,8 +66,8 @@ public class RenderSystem extends EntitySystem {
 		for (Entity e : entities.values()) {
 			position = e.getComponent(PositionComponent.class);
 			visual = e.getComponent(VisualComponent.class);
-
-			batch.draw(visual.region, position.x, position.y, 1f, 1f);
+			Gdx.app.log("GAME", "WTF IS HAPPENING?");
+			//batch.draw(visual.region, position.x, position.y, 1, 1);
 
 			batch.end();
 		}

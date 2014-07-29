@@ -37,7 +37,9 @@ public class MovementSystem extends IteratingSystem {
 		position = entity.getComponent(PositionComponent.class);
 		movement = entity.getComponent(MovementComponent.class);
 
-		position.x += movement.velocityX * deltaTime * MathUtils.random(-5, 5);
-		position.y += movement.velocityY * deltaTime * MathUtils.random(-5, 5);
+		position.x += movement.velocityX * deltaTime
+				* MathUtils.random(-10, 10);
+		position.y += movement.velocityY * deltaTime
+				* MathUtils.random(-10, 10);
 	}
 }

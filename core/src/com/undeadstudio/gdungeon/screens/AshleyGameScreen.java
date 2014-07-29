@@ -3,7 +3,6 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -29,54 +28,66 @@ public class AshleyGameScreen implements Screen {
 	OrthographicCamera camera;
 	InputMultiplexer input;
 
+	MovementSystem movement;
+	RenderSystem render;
+	InputSystem inputSys;
+	EntityController controller;
+
 	public AshleyGameScreen(Main main) {
 		this.main = main;
+
 	}
 
 	@Override
 	public void render(float delta) {
-
 		Gdx.input.setInputProcessor(input);
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		engine.update(Gdx.graphics.getDeltaTime());
+		input.getProcessors().toString();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		camera = new OrthographicCamera(10, 10);
-		camera.position.set(0, 0, 0);
+		camera = new OrthographicCamera(50, 50);
+		camera.position.set(25, 25, 0);
 		camera.update();
 
+		movement = new MovementSystem();
+		render = new RenderSystem(camera);
+		inputSys = new InputSystem(input);
+
 		Texture coinTexture = new Texture("coin.png");
+		TextureRegion coinRegion = new TextureRegion(coinTexture);
 
 		input = new InputMultiplexer();
 
 		engine = new PooledEngine();
-		engine.addSystem(new RenderSystem(camera));
-		engine.addSystem(new MovementSystem());
-		engine.addSystem(new InputSystem(input));
+		engine.addSystem(render);
+		engine.addSystem(movement);
+		engine.addSystem(inputSys);
 
 		Entity rouge = engine.createEntity();
-		rouge.add(new PositionComponent(0, 0));
+		rouge.add(new PositionComponent(25, 25));
 		rouge.add(new MovementComponent(0, 0));
-		rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
+		rouge.add(new VisualComponent(
+				(TextureRegion) Assets.instance.rouge.rouge_0_0));
 		rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
 		engine.addEntity(rouge);
 
-		TextureRegion coinRegion = new TextureRegion(coinTexture);
-
 		for (int i = 0; i < 100; i++) {
 			Entity coin = engine.createEntity();
-			coin.add(new PositionComponent(MathUtils.random(640), MathUtils
-					.random(480)));
-			coin.add(new MovementComponent(5.0f, 5.0f));
+			coin.add(new PositionComponent(MathUtils.random(50), MathUtils
+					.random(50)));
+			//coin.add(new MovementComponent(5.0f, 5.0f));
 			coin.add(new VisualComponent(coinRegion));
+			//coin.add(new InputComponent(new EntityController(camera, coin)));
 			engine.addEntity(coin);
 		}
+
 		Gdx.input.setInputProcessor(input);
 	}
 
