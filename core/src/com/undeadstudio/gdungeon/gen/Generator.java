@@ -2,30 +2,34 @@ package com.undeadstudio.gdungeon.gen;
 
 import com.badlogic.gdx.math.MathUtils;
 
-// http://roguebasin.roguelikedevelopment.org/index.php?title=Dungeon-Building_Algorithm
-public class DunGen {
+public class Generator {
+
+	GeneratorConfig config;
+
+	public Generator(GeneratorConfig config) {
+		this.config = config;
+	}
+
 	// max size of the map
+	private int xmax = config.xmax; // 80 columns
 
-	private int xmax = 80; // 80 columns
-
-	private int ymax = 25; // 25 rows
+	private int ymax = config.ymax; // 25 rows
 
 	// size of the map
+	private int xsize = config.xsize;
 
-	private int xsize = 0;
-
-	private int ysize = 0;
+	private int ysize = config.ysize;
 
 	// number of "objects" to generate on the map
 
-	private int objects = 0;
+	private int objects = config.objects;
 
 	// define the %chance to generate either a room or a corridor on the map
 	// BTW, rooms are 1st priority so actually it's enough to just define the
 	// chance
 	// of generating a room
 
-	private int chanceRoom = 100;
+	private int chanceRoom = config.chanceRoom;
 
 	// private int chanceCorridor = 25;
 
@@ -98,33 +102,8 @@ public class DunGen {
 		}
 	}
 
-	// The RNG. the seed is based on seconds from the "java epoch" ( I think..)
-	// perhaps it's the same date as the unix epoch
-
 	private int getRand(int min, int max) {
-
 		return MathUtils.random(min, max);
-
-		// // the seed is based on current date and the old, already used seed
-		// Date now = new Date();
-		//
-		// long seed = now.getTime() + oldseed;
-		//
-		// oldseed = seed;
-		//
-		// Random randomizer = new Random(seed);
-		//
-		// int n = max - min + 1;
-		//
-		// int i = randomizer.nextInt(n);
-		//
-		// if (i < 0)
-		//
-		// i = -i;
-		//
-		// // System.out.println("seed: " + seed + "\tnum:  " + (min + i));
-		//
-		// return min + i;
 
 	}
 
@@ -964,15 +943,21 @@ public class DunGen {
 		// create a new class of "dungen", so we can use all the goodies within
 		// it
 
-		DunGen generator = new DunGen();
-
 		// then we create a new dungeon map
 
-		generator.createDungeon(x, y, dungeon_objects);
+		createDungeon(x, y, dungeon_objects);
 
 		// always good to be able to see the results..
 
-		return generator.showDungeon();
+		return showDungeon();
+
+	}
+
+	public String getDungeon() {
+		// then we create a new dungeon map
+		createDungeon(config.xmax, config.ymax, config.objects);
+		// always good to be able to see the results..
+		return showDungeon();
 
 	}
 
@@ -980,26 +965,11 @@ public class DunGen {
 
 	public static void main(String[] args) {
 
-		// initial stuff used in making the map
-
-		int x = 80;
-		int y = 25;
-		int dungeon_objects = 0;
-
 		// create a new class of "dungen", so we can use all the goodies within
 		// it
-
-		DunGen generator = new DunGen();
-
-		// then we create a new dungeon map
-
-		if (generator.createDungeon(x, y, dungeon_objects)) {
-
-			// always good to be able to see the results..
-
-			generator.showDungeon();
-
-		}
+		Generator generator = new Generator(new GeneratorConfig() {
+		});
+		generator.getDungeon();
 
 	}
 
