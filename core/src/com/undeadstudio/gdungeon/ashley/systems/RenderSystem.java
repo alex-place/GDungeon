@@ -64,7 +64,9 @@ public class RenderSystem extends EntitySystem {
 			position = e.getComponent(PositionComponent.class);
 			visual = e.getComponent(VisualComponent.class);
 
-			batch.draw(visual.region, position.x, position.y, 1,1);
+			batch.setColor(visual.color);
+			batch.draw(visual.region, position.x, position.y, 1, 1);
+			batch.setColor(1, 1, 1, 1);
 		}
 
 		batch.end();

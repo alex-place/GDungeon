@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -81,22 +82,23 @@ public class AshleyGameScreen implements Screen {
 
 			Entity rouge = engine.createEntity();
 			rouge.add(new PositionComponent(25, 25));
-			rouge.add(new MovementComponent(0, 0));
-			rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
+			// rouge.add(new MovementComponent(0, 0));
+			rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0,
+					new Color()));
 			rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
 			engine.addEntity(rouge);
 
-			for (int i = 0; i < 100; i++) {
-				Entity coin = engine.createEntity();
-				coin.add(new PositionComponent(MathUtils.random(50), MathUtils
-						.random(50)));
-				coin.add(new MovementComponent(0f, 0f));
-				coin.add(new VisualComponent(coinRegion));
-				// coin.add(new InputComponent(new EntityController(camera,
-				// coin)));
-				engine.addEntity(coin);
-			}
+			// for (int i = 0; i < 100; i++) {
+			// Entity coin = engine.createEntity();
+			// coin.add(new PositionComponent(MathUtils.random(50), MathUtils
+			// .random(50)));
+			// coin.add(new MovementComponent(0f, 0f));
+			// coin.add(new VisualComponent(coinRegion));
+			// // coin.add(new InputComponent(new EntityController(camera,
+			// // coin)));
+			// engine.addEntity(coin);
+			// }
 
 			Gdx.input.setInputProcessor(input);
 			init = true;

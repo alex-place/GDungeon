@@ -17,12 +17,15 @@
 package com.undeadstudio.gdungeon.ashley.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class VisualComponent extends Component {
 	public TextureRegion region;
+	public Color color;
 
-	public VisualComponent(TextureRegion region) {
+	public VisualComponent(TextureRegion region, Color color) {
 		this.region = region;
+		this.color = color;
 	}
 }

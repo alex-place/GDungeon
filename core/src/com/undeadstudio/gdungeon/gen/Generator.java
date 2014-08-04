@@ -10,25 +10,25 @@ public class Generator {
 	PooledEngine engine;
 
 	// max size of the map
-	private int xmax = 80; // 80 columns
+	private int xmax = 150; // 80 columns
 
-	private int ymax = 80; // 25 rows
+	private int ymax = 150; // 25 rows
 
 	// size of the map
-	private int xsize = 80;
+	private int xsize = 150;
 
-	private int ysize = 80;
+	private int ysize = 150;
 
 	// number of "objects" to generate on the map
 
-	private int objects = 20;
+	private int objects = 1000;
 
 	// define the %chance to generate either a room or a corridor on the map
 	// BTW, rooms are 1st priority so actually it's enough to just define the
 	// chance
 	// of generating a room
 
-	private int chanceRoom = 60;
+	private int chanceRoom = 52;
 
 	// our map
 
@@ -73,7 +73,7 @@ public class Generator {
 	private String showDungeon(PooledEngine engine) {
 		String dungeon = "";
 
-		for (int y = ysize-1; y > 0; y--) {
+		for (int y = ysize - 1; y > 0; y--) {
 
 			for (int x = 0; x < xsize; x++) {
 
@@ -208,7 +208,7 @@ public class Generator {
 		// define the dimensions of the corridor (er.. only the width and
 		// height..)
 
-		int len = getRand(2, lenght);
+		int len = getRand(2, 10);
 
 		int floor = tileCorridor;
 
@@ -683,7 +683,7 @@ public class Generator {
 			// 1000 chances to find a suitable object (room or corridor)..
 			// (yea, i know it's kinda ugly with a for-loop... -_-')
 
-			for (int testing = 0; testing < 1000; testing++) {
+			for (int testing = 0; testing < 100; testing++) {
 
 				newx = getRand(1, xsize - 1);
 
@@ -791,11 +791,15 @@ public class Generator {
 
 						// then we mark the wall opening with a door
 
-						setCell(newx, newy, tileDoor);
+						setCell((newx + xmod), (newy + ymod), tileDoor);
 
 						// clean up infront of the door so we can reach it
 
-						setCell((newx + xmod), (newy + ymod), tileDirtFloor);
+						if (getCell(newx, newy) != tileDirtWall) {
+							setCell(newx, newy, tileCorridor);
+						} else {
+							setCell(newx, newy, tileDirtFloor);
+						}
 
 					}
 
@@ -809,7 +813,10 @@ public class Generator {
 
 						currentFeatures++;
 
-						setCell(newx, newy, tileDoor);
+						if (getCell(newx, newy) == tileDirtWall) {
+							setCell(newx, newy, tileDoor);
+
+						}
 
 					}
 
