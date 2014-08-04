@@ -1,37 +1,34 @@
 package com.undeadstudio.gdungeon.gen;
 
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.MathUtils;
+import com.undeadstudio.gdungeon.Assets;
+import com.undeadstudio.gdungeon.ashley.utils.EntityFactory;
 
 public class Generator {
 
-	GeneratorConfig config;
-
-	public Generator(GeneratorConfig config) {
-		this.config = config;
-	}
+	PooledEngine engine;
 
 	// max size of the map
-	private int xmax = config.xmax; // 80 columns
+	private int xmax = 80; // 80 columns
 
-	private int ymax = config.ymax; // 25 rows
+	private int ymax = 80; // 25 rows
 
 	// size of the map
-	private int xsize = config.xsize;
+	private int xsize = 80;
 
-	private int ysize = config.ysize;
+	private int ysize = 80;
 
 	// number of "objects" to generate on the map
 
-	private int objects = config.objects;
+	private int objects = 20;
 
 	// define the %chance to generate either a room or a corridor on the map
 	// BTW, rooms are 1st priority so actually it's enough to just define the
 	// chance
 	// of generating a room
 
-	private int chanceRoom = config.chanceRoom;
-
-	// private int chanceCorridor = 25;
+	private int chanceRoom = 60;
 
 	// our map
 
@@ -61,8 +58,6 @@ public class Generator {
 
 	final private int tileChest = 8;
 
-	// misc. messages to print
-
 	private String msgXSize = "X size of dungeon: \t";
 
 	private String msgYSize = "Y size of dungeon: \t";
@@ -71,9 +66,110 @@ public class Generator {
 
 	private String msgNumObjects = "# of objects made: \t";
 
-	// private String msgHelp = "";
+	public Generator(PooledEngine engine) {
+		this.engine = engine;
+	}
 
-	// private String msgDetailedHelp = "";
+	private String showDungeon(PooledEngine engine) {
+		String dungeon = "";
+
+		for (int y = ysize-1; y > 0; y--) {
+
+			for (int x = 0; x < xsize; x++) {
+
+				// System.out.print(getCell(x, y));
+
+				switch (getCell(x, y)) {
+
+				case tileUnused:
+
+					// System.out.print(" ");
+					dungeon += Tile.AIR;
+
+					break;
+
+				case tileDirtWall:
+
+					// System.out.print("+");
+					dungeon += Tile.WALL_DIRT;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.wall.reg));
+
+					break;
+
+				case tileDirtFloor:
+
+					// System.out.print(".");
+					dungeon += Tile.FLOOR_DIRT;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.floor.reg));
+					break;
+
+				case tileStoneWall:
+
+					// System.out.print("O");
+					dungeon += Tile.WALL_STONE;
+
+					break;
+
+				case tileCorridor:
+
+					// System.out.print("#");
+					dungeon += Tile.CORRIDOR;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.corridor.reg));
+					break;
+
+				case tileDoor:
+
+					// System.out.print("D");
+					dungeon += Tile.DOOR;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.door.reg));
+
+					break;
+
+				case tileUpStairs:
+
+					// System.out.print("<");
+					dungeon += Tile.STAIRS_UP;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.stairsUp.reg));
+
+					break;
+
+				case tileDownStairs:
+
+					// System.out.print(">");
+					dungeon += Tile.STAIRS_DOWN;
+					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
+							Assets.instance.stairsUp.reg));
+
+					break;
+
+				case tileChest:
+
+					// System.out.print("*");
+					dungeon += Tile.CHEST_UNOPENED;
+
+					break;
+
+				default:
+					// System.out.print("?");
+					dungeon += Tile.UNKNOWN;
+
+				}
+
+			}
+
+			// System.out.println();
+			dungeon += "\n";
+
+		}
+
+		// System.out.println(dungeon);
+		return dungeon;
+	}
 
 	// setting a tile's type
 
@@ -91,7 +187,7 @@ public class Generator {
 
 	}
 
-	public boolean isWall(int x, int y) {
+	private boolean isWall(int x, int y) {
 
 		int type = getCell(x, y);
 
@@ -481,101 +577,9 @@ public class Generator {
 
 	// used to print the map on the screen
 
-	public String showDungeon() {
-		String dungeon = "";
-
-		for (int y = 0; y < ysize; y++) {
-
-			for (int x = 0; x < xsize; x++) {
-
-				// System.out.print(getCell(x, y));
-
-				switch (getCell(x, y)) {
-
-				case tileUnused:
-
-					System.out.print(" ");
-					dungeon += Tile.AIR;
-
-					break;
-
-				case tileDirtWall:
-
-					System.out.print("+");
-					dungeon += Tile.WALL_DIRT;
-
-					break;
-
-				case tileDirtFloor:
-
-					System.out.print(".");
-					dungeon += Tile.FLOOR_DIRT;
-
-					break;
-
-				case tileStoneWall:
-
-					System.out.print("O");
-					dungeon += Tile.WALL_STONE;
-
-					break;
-
-				case tileCorridor:
-
-					System.out.print("#");
-					dungeon += Tile.CORRIDOR;
-
-					break;
-
-				case tileDoor:
-
-					System.out.print("D");
-					dungeon += Tile.DOOR;
-
-					break;
-
-				case tileUpStairs:
-
-					System.out.print("<");
-					dungeon += Tile.STAIRS_UP;
-
-					break;
-
-				case tileDownStairs:
-
-					System.out.print(">");
-					dungeon += Tile.STAIRS_DOWN;
-
-					break;
-
-				case tileChest:
-
-					System.out.print("*");
-					dungeon += Tile.CHEST_UNOPENED;
-
-					break;
-
-				default:
-					System.out.print("?");
-					dungeon += Tile.UNKNOWN;
-
-				}
-				;
-
-			}
-
-			System.out.println();
-			dungeon += "\n";
-
-		}
-
-		System.out.println(dungeon);
-		return dungeon;
-	}
-
 	// and here's the one generating the whole map
 
-	public boolean createDungeon(int inx, int iny, int inobj) {
+	private boolean createDungeon(int inx, int iny, int inobj) {
 
 		if (inobj < 1)
 			objects = 10;
@@ -934,42 +938,10 @@ public class Generator {
 	}
 
 	public String newDungeon() {
-		// initial stuff used in making the map
-
-		int x = 80;
-		int y = 25;
-		int dungeon_objects = 0;
-
-		// create a new class of "dungen", so we can use all the goodies within
-		// it
-
 		// then we create a new dungeon map
-
-		createDungeon(x, y, dungeon_objects);
-
+		createDungeon(xmax, ymax, objects);
 		// always good to be able to see the results..
-
-		return showDungeon();
-
-	}
-
-	public String getDungeon() {
-		// then we create a new dungeon map
-		createDungeon(config.xmax, config.ymax, config.objects);
-		// always good to be able to see the results..
-		return showDungeon();
-
-	}
-
-	// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	public static void main(String[] args) {
-
-		// create a new class of "dungen", so we can use all the goodies within
-		// it
-		Generator generator = new Generator(new GeneratorConfig() {
-		});
-		generator.getDungeon();
+		return showDungeon(engine);
 
 	}
 

@@ -3,7 +3,6 @@ package com.undeadstudio.gdungeon.screens;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +20,9 @@ import com.undeadstudio.gdungeon.ashley.input.EntityController;
 import com.undeadstudio.gdungeon.ashley.systems.InputSystem;
 import com.undeadstudio.gdungeon.ashley.systems.MovementSystem;
 import com.undeadstudio.gdungeon.ashley.systems.RenderSystem;
+import com.undeadstudio.gdungeon.ashley.utils.EntityFactory;
+import com.undeadstudio.gdungeon.gen.Generator;
+import com.undeadstudio.gdungeon.gen.GeneratorConfig;
 
 public class AshleyGameScreen implements Screen {
 
@@ -33,6 +35,10 @@ public class AshleyGameScreen implements Screen {
 	RenderSystem render;
 	InputSystem inputSys;
 	EntityController controller;
+
+	Generator generator;
+
+	boolean init = false;
 
 	public AshleyGameScreen(Main main) {
 		this.main = main;
@@ -51,43 +57,50 @@ public class AshleyGameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		camera = new OrthographicCamera(50, 50);
-		camera.position.set(25, 25, 0);
-		camera.update();
+		if (init == false) {
+			camera = new OrthographicCamera(50, 50);
+			camera.position.set(25, 25, 0);
+			camera.update();
 
-		input = new InputMultiplexer();
+			input = new InputMultiplexer();
 
-		movement = new MovementSystem();
-		render = new RenderSystem(camera);
-		inputSys = new InputSystem(input);
+			movement = new MovementSystem();
+			render = new RenderSystem(camera);
+			inputSys = new InputSystem(input);
 
-		Texture coinTexture = new Texture("coin.png");
-		TextureRegion coinRegion = new TextureRegion(coinTexture);
+			Texture coinTexture = new Texture("coin.png");
+			TextureRegion coinRegion = new TextureRegion(coinTexture);
 
-		engine = new PooledEngine();
-		engine.addSystem(render);
-		engine.addSystem(movement);
-		engine.addSystem(inputSys);
+			engine = new PooledEngine();
+			engine.addSystem(render);
+			engine.addSystem(movement);
+			engine.addSystem(inputSys);
 
-		Entity rouge = engine.createEntity();
-		rouge.add(new PositionComponent(25, 25));
-		rouge.add(new MovementComponent(0, 0));
-		rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
-		rouge.add(new InputComponent(new EntityController(camera, rouge)));
+			generator = new Generator(engine);
+			Gdx.app.log("GAME", generator.newDungeon());
 
-		engine.addEntity(rouge);
+			Entity rouge = engine.createEntity();
+			rouge.add(new PositionComponent(25, 25));
+			rouge.add(new MovementComponent(0, 0));
+			rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0));
+			rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
-		for (int i = 0; i < 100; i++) {
-			Entity coin = engine.createEntity();
-			coin.add(new PositionComponent(MathUtils.random(50), MathUtils
-					.random(50)));
-			coin.add(new MovementComponent(0f, 0f));
-			coin.add(new VisualComponent(coinRegion));
-			// coin.add(new InputComponent(new EntityController(camera, coin)));
-			engine.addEntity(coin);
+			engine.addEntity(rouge);
+
+			for (int i = 0; i < 100; i++) {
+				Entity coin = engine.createEntity();
+				coin.add(new PositionComponent(MathUtils.random(50), MathUtils
+						.random(50)));
+				coin.add(new MovementComponent(0f, 0f));
+				coin.add(new VisualComponent(coinRegion));
+				// coin.add(new InputComponent(new EntityController(camera,
+				// coin)));
+				engine.addEntity(coin);
+			}
+
+			Gdx.input.setInputProcessor(input);
+			init = true;
 		}
-
-		Gdx.input.setInputProcessor(input);
 	}
 
 	@Override

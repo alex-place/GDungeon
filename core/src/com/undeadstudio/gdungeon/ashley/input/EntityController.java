@@ -19,14 +19,14 @@ public class EntityController extends InputAdapter implements GestureListener {
 
 	public EntityController(OrthographicCamera camera, Entity entity) {
 		this.entity = entity;
-		this.camera = camera;	}
+		this.camera = camera;
+	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		Vector3 tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		touchDown(tmp.x, tmp.y, pointer, button);
-		Gdx.app.log("GAME", "Input being taken! ????");
 
 		return false;
 	}
@@ -36,7 +36,6 @@ public class EntityController extends InputAdapter implements GestureListener {
 		Vector3 tmp = new Vector3(screenX, screenY, 0);
 		tmp = camera.unproject(tmp);
 		// tap(tmp.x, tmp.y, 0, 0);
-		Gdx.app.log("GAME", "Input being taken! ????");
 
 		return false;
 	}
@@ -45,7 +44,6 @@ public class EntityController extends InputAdapter implements GestureListener {
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
 		move(x, y);
-		Gdx.app.log("GAME", "Input being taken! ????");
 
 		return false;
 	}
@@ -56,8 +54,7 @@ public class EntityController extends InputAdapter implements GestureListener {
 
 		switch (keycode) {
 		case Keys.SPACE:
-			camera.position.set(new Vector3(temp.x +1, temp.y+1, 0));
-			Gdx.app.log("GAME", "Input being taken! ????");
+			camera.position.set(new Vector3(temp.x + 1, temp.y + 1, 0));
 
 			break;
 
@@ -81,7 +78,6 @@ public class EntityController extends InputAdapter implements GestureListener {
 		pos = entity.getComponent(PositionComponent.class);
 		pos.x = x;
 		pos.y = y;
-		Gdx.app.log("GAME", "Input being taken!");
 	}
 
 	@Override
