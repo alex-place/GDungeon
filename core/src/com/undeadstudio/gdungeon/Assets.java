@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -32,6 +33,7 @@ public class Assets implements Disposable, AssetErrorListener {
 	public AssetRouge rouge;
 	public AssetWarrior warrior;
 	public AssetWizard wizard;
+	public AssetColor color;
 
 	private void Assets() {
 	}
@@ -66,6 +68,8 @@ public class Assets implements Disposable, AssetErrorListener {
 		warrior = new AssetWarrior(atlas);
 		wizard = new AssetWizard(atlas);
 
+		color = new AssetColor();
+
 	}
 
 	@Override
@@ -79,7 +83,6 @@ public class Assets implements Disposable, AssetErrorListener {
 	@Override
 	public void dispose() {
 		assetManager.dispose();
-
 	}
 
 	public class AssetFonts {
@@ -231,6 +234,14 @@ public class Assets implements Disposable, AssetErrorListener {
 			wizard_3_0 = atlas.findRegion("wizard-3-0");
 			wizard_3_1 = atlas.findRegion("wizard-3-1");
 			wizard_3_2 = atlas.findRegion("wizard-3-2");
+		}
+	}
+
+	public class AssetColor {
+		public final Color green;
+
+		public AssetColor() {
+			green = new Color(0, 1, 0, 1);
 		}
 	}
 

@@ -93,7 +93,8 @@ public class Generator {
 					// System.out.print("+");
 					dungeon += Tile.WALL_DIRT;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.wall.reg));
+							Assets.instance.wall.reg,
+							Assets.instance.color.green));
 
 					break;
 
@@ -102,7 +103,8 @@ public class Generator {
 					// System.out.print(".");
 					dungeon += Tile.FLOOR_DIRT;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.floor.reg));
+							Assets.instance.floor.reg,
+							Assets.instance.color.green));
 					break;
 
 				case tileStoneWall:
@@ -117,7 +119,8 @@ public class Generator {
 					// System.out.print("#");
 					dungeon += Tile.CORRIDOR;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.corridor.reg));
+							Assets.instance.corridor.reg,
+							Assets.instance.color.green));
 					break;
 
 				case tileDoor:
@@ -125,7 +128,8 @@ public class Generator {
 					// System.out.print("D");
 					dungeon += Tile.DOOR;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.door.reg));
+							Assets.instance.door.reg,
+							Assets.instance.color.green));
 
 					break;
 
@@ -134,7 +138,8 @@ public class Generator {
 					// System.out.print("<");
 					dungeon += Tile.STAIRS_UP;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.stairsUp.reg));
+							Assets.instance.stairsUp.reg,
+							Assets.instance.color.green));
 
 					break;
 
@@ -143,7 +148,8 @@ public class Generator {
 					// System.out.print(">");
 					dungeon += Tile.STAIRS_DOWN;
 					engine.addEntity(EntityFactory.instance.newStaticTile(x, y,
-							Assets.instance.stairsUp.reg));
+							Assets.instance.stairsUp.reg,
+							Assets.instance.color.green));
 
 					break;
 

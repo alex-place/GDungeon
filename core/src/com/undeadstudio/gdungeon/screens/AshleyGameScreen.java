@@ -84,7 +84,7 @@ public class AshleyGameScreen implements Screen {
 			rouge.add(new PositionComponent(25, 25));
 			// rouge.add(new MovementComponent(0, 0));
 			rouge.add(new VisualComponent(Assets.instance.rouge.rouge_0_0,
-					new Color()));
+					new Color(1, 1, 1, 1)));
 			rouge.add(new InputComponent(new EntityController(camera, rouge)));
 
 			engine.addEntity(rouge);

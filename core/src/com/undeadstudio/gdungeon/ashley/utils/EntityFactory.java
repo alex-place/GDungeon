@@ -13,10 +13,10 @@ public class EntityFactory {
 	private EntityFactory() {
 	}
 
-	public Entity newStaticTile(int x, int y, TextureRegion region) {
+	public Entity newStaticTile(int x, int y, TextureRegion region, Color color) {
 
 		Entity entity = new Entity();
-		entity.add(new VisualComponent(region, new Color(0.5f, 1f, 0.5f, 1f)));
+		entity.add(new VisualComponent(region, color));
 		entity.add(new PositionComponent(x, y));
 		return entity;
 	}
